@@ -10,25 +10,20 @@ Description: Python programs implementing Levenshtein Edit Distance (ED) naïve 
 """
 import time
 
-
 # ------------------------------------------------------------
 #            Naïve Recursive Dynamic Programming
 # ------------------------------------------------------------
 def editDistRec(str1, str2, m, n):  # m = length of str 1, n = length of str2
-    global count  # bookkeeping purpose
-    count += 1
     # If empty, return the length of the other string
     if m == 0: return n
     if n == 0: return m
     if str1[m - 1] == str2[n - 1]:
+
         return editDistRec(str1, str2, m - 1, n - 1)
 
     return 1 + min(editDistRec(str1, str2, m, n - 1),  # insert
                    editDistRec(str1, str2, m - 1, n),  # delete
                    editDistRec(str1, str2, m - 1, n - 1))  # replace
-
-
-count = 0
 
 
 # ------------------------------------------------------------
@@ -122,13 +117,19 @@ def test(check_str, str_list, *args):
 # ------------------------------------------------------------
 #                        Driver code
 # ------------------------------------------------------------
-filename = "rand1000.txt"
-# filename = "rand250000.txt"
-str_list = getIntegers(filename)
-check_str = "012345678"
+def main():
+    filename = "rand1000.txt"
+    # filename = "rand250000.txt"
+    str_list = getIntegers(filename)
+    check_str = "012345678"
 
-""" to test functions, uncomment each in turns """
+    """ to test functions, uncomment each in turns """
 
-timeEfficiency(test(check_str, str_list), "Naïve Recursive")
-# timeEfficiency(test(check_str, str_list), "Memoization DP")
-# timeEfficiency(test(check_str, str_list), "Bottom-up DP")
+    timeEfficiency(test(check_str, str_list), "Naïve Recursive")
+    # timeEfficiency(test(check_str, str_list), "Memoization DP")
+    # timeEfficiency(test(check_str, str_list), "Bottom-up DP")
+
+
+
+if __name__ == '__main__':
+    main()
