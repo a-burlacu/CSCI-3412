@@ -5,17 +5,18 @@ import requests
 from bs4 import BeautifulSoup
 import webbrowser
 
-#-------------------------------------------------------------
-#                 Part 1: UCDenver departments
-#-------------------------------------------------------------
-def ucdenver_webscrape():
 
+# -------------------------------------------------------------
+#                 Part 1: UCDenver departments
+# -------------------------------------------------------------
+def ucdenver_webscrape():
     url = 'http://www.ucdenver.edu/pages/ucdwelcomepage.aspx'
 
-    headers = {'user-agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.3'}
+    headers = {
+        'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.3'}
 
     # accessing the url
-    request = urllib.request.Request(url,headers=headers)
+    request = urllib.request.Request(url, headers=headers)
 
     # parsing html
     html = urllib.request.urlopen(request).read()
@@ -40,7 +41,6 @@ def ucdenver_webscrape():
                       "url": dep.get("url", "Not found")}
         new_list.append(department)  # creating dictionary
 
-
     # Save to file 'links.json'
     with open('links.json', 'w') as links:
         json.dump(new_list, links, indent=1)
@@ -48,23 +48,20 @@ def ucdenver_webscrape():
 
 # REF:https://www.scrapehero.com/a-beginners-guide-to-web-scraping-part-2-build-a-scraper-for-reddit/
 
-#-------------------------------------------------------------
+# -------------------------------------------------------------
 #                  Part 2: COVID-19 stats table
-#-------------------------------------------------------------
+# -------------------------------------------------------------
 
 def covid_webscrape():
-
     pd.pandas.set_option('display.max_columns', None)
 
-    url= 'https://covid19.colorado.gov/data'
-
+    url = 'https://covid19.colorado.gov/data'
 
     # Make a GET request to fetch the raw HTML content
     html_content = requests.get(url).text
 
     # Parse the html content
     soup = BeautifulSoup(html_content, 'html.parser')
-
 
     # Get the table
     table = soup.find("table")
@@ -92,7 +89,6 @@ def covid_webscrape():
     # Transpose ().T  the DataFrame since it will be sideways otherwise (i.e. the headings will be in the 1st column)
     df = pd.DataFrame(rows, index=headings).T
 
-
     # save the DataFrame as html table in file
     with open('covid_data.html', 'w') as f:
         print(df.to_html(), file=f)
@@ -104,10 +100,9 @@ def covid_webscrape():
 # REF: https://www.pluralsight.com/guides/extracting-data-html-beautifulsoup
 
 
-
-#-------------------------------------------------------------
+# -------------------------------------------------------------
 #                      Driver Code
-#-------------------------------------------------------------
+# -------------------------------------------------------------
 
 ucdenver_webscrape()
 covid_webscrape()
